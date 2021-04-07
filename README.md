@@ -2,8 +2,9 @@ Features:
 
 - A MERN stack application.
 - Responsive for tablet, mobile and PC
-- User authorization Admin and User.
-- Authentication (Google) added.
+- Admin and User functionalities
+- Product order and placement
+- Authentication (Google and email) added.
 
 Used Technology:
 
@@ -13,7 +14,7 @@ Used Technology:
 - Firebase for authentication
 - React Bootstrap for responsiveness
 - Firebase for frontend hosting
-- Heroku as backend hosting
+- Heroku for backend hosting
 
  [Live LInk](https://emajohn-simple-with-login.web.app)
 
