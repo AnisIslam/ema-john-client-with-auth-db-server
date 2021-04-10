@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../../App';
 import { getDatabaseCart, processOrder } from '../../utilities/databaseManager';
@@ -8,10 +8,22 @@ import './Shipment.css'
 const Shipment = () => {
   const { register, handleSubmit, watch, errors } = useForm();
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const [shippingData, setShippingData] = useState(null);
+
   const onSubmit = data => {
-    console.log('form submitted', data)
+    setShippingData(data);
+  };
+
+  const handlePaymentSuccess = paymentId => {
+    // console.log('form submitted', data)
     const savedCart = getDatabaseCart();
-    const orderDetails = { ...loggedInUser, products: savedCart, shipment: data, orderTime: new Date() };
+    const orderDetails = {
+      ...loggedInUser,
+      products: savedCart,
+      paymentId,
+      shipment: shippingData,
+      orderTime: new Date()
+    };
 
     fetch(' https://anis-ema-john-ecommerce.herokuapp.com/addOrder', {
       method: 'POST',
@@ -28,15 +40,13 @@ const Shipment = () => {
         }
 
       });
-
-
-  };
+  }
 
   console.log(watch("example")); // watch input value by passing the name of it
 
   return (
     <div className="row">
-      <div className="col-md-6">
+      <div style={{display: shippingData? 'none':'block'}} className="col-md-6">
         <form className='ship-form' onSubmit={handleSubmit(onSubmit)}>
 
           <input name="name" defaultValue={loggedInUser.name} ref={register({ required: true })} placeholder="Your Name" />
@@ -54,9 +64,9 @@ const Shipment = () => {
           <input type="submit" />
         </form>
       </div>
-      <div className="col-md-6">
+      <div style={{display: shippingData? 'block':'none'}} className="col-md-6">
         <h2>Please pay for me</h2>
-        <ProcessPayment></ProcessPayment>
+        <ProcessPayment handlePayment= {handlePaymentSuccess}></ProcessPayment>
       </div>
     </div>
 

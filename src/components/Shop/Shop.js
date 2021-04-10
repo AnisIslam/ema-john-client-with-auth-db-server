@@ -7,17 +7,17 @@ import Product from '../Product/Product';
 import './Shop.css'
 
 const Shop = () => {
-    // const first10 = fakeData.slice(0, 10);
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
+    const [search, setSearch] = useState([]);
 
     //Load data from server no fakedata now
 
     useEffect(() => {
-        fetch(' https://anis-ema-john-ecommerce.herokuapp.com/products')
+        fetch(' https://anis-ema-john-ecommerce.herokuapp.com/products?search='+search)
             .then(res => res.json())
             .then(data => setProducts(data))
-    }, [])
+    }, [search])
 
     useEffect(() => {
         const savedCart = getDatabaseCart();
@@ -31,22 +31,12 @@ const Shop = () => {
         })
         .then(res => res.json())
         .then(data => setCart(data));
-        
-        // const savedCart = getDatabaseCart();
-        // const productKeys = Object.keys(savedCart);  
-        // console.log(products, productKeys);
-        // if (products.length) {
-        //     const previousCart = productKeys.map(existingKey => {
-        //         const product = products.find(pd => pd.key === existingKey)
-        //         product.quantity = savedCart[existingKey];
-        //         // console.log(existingKey, savedCart[existingKey]);
-
-        //         return product;
-        //     })
-        //     setCart(previousCart);
-        // }
-
     }, [])
+
+    const handleSearch = event =>{
+        setSearch(event.target.value);
+
+    }
 
     const handleAddProduct = (product) => {
         const toBeAddedKey = product.key; //set product key
@@ -77,6 +67,7 @@ const Shop = () => {
     return (
         <div className='twin-container'>
             <div className="product-container">
+                <input type="text" onBlur={handleSearch} placeholder="search product" className='product-search'/>
                 {
                     products.map(pd => <Product
                         key={pd.key}

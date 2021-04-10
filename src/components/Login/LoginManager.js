@@ -27,6 +27,7 @@ export const handleGoogleSignIn = () => {
                 success: true
 
             }
+            setUserToken();
             return signedInUser;
             console.log(user);
         }).catch((error) => {
@@ -36,6 +37,14 @@ export const handleGoogleSignIn = () => {
             var credential = error.credential;
             console.log(errorMessage);
         });
+}
+
+const setUserToken = () => {
+    firebase.auth().currentUser.getIdToken(true).then(function (idToken) {
+        sessionStorage.setItem('token', idToken);
+    }).catch(function (error) {
+
+    });
 }
 //google signin functioanlities end
 
